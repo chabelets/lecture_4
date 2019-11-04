@@ -11,15 +11,41 @@ class WeatherContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(
-          '${weather.locationName} - ${weather.temperature} °C',
-          style: Theme.of(context).textTheme.display1,
-          textAlign: TextAlign.center,
-        ),
-        Image.network(weather.iconUrl),
-      ],
+    final _locationName = '${weather.locationName}';
+    final _locationTemp = '${weather.temperature} °C';
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        if (orientation == Orientation.portrait) {
+          return Column(
+            children: <Widget>[
+              _getWeatherText(context,'$_locationName - $_locationTemp'),
+              Image.network(weather.iconUrl),
+            ],
+          );
+        } else {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _getWeatherText(context, _locationName),
+                  _getWeatherText(context, _locationTemp)
+                ],
+              ),
+              Image.network(weather.iconUrl),
+            ],
+          );
+        }
+      },
+    );
+  }
+
+  Widget _getWeatherText(BuildContext context, String text){
+    return Text(
+      '$text',
+      style: Theme.of(context).textTheme.display1,
+      textAlign: TextAlign.center,
     );
   }
 }
